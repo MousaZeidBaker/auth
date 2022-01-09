@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "auth"
+version = "0.1.0"
+description = ""
+authors = ["Mousa Zeid Baker"]
+
+packages = [
+    { include = "auth", from = "src" },
+]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^1.8.2"
+python-multipart = "^0.0.5"
+warrant = "^0.6.1"
+boto3 = "^1.20.26"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+cryptography = "^36.0.1"
+python-dotenv = "^0.19.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+pytest-mock = "^3.6.1"
+black = "^21.12b0"
+isort = "^5.10.1"
+flake8 = "^4.0.1"
+flake8-black = "^0.2.3"
+flake8-isort = "^4.1.1"
+flake8-eradicate = "^1.2.0"
+pre-commit = "^2.16.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
