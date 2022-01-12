@@ -188,7 +188,7 @@ class CognitoAuthenticator(ports.Authenticator):
     def get_current_user(
         self,
         token: str,
-    ) -> models.Token:
+    ) -> models.User:
         """Return current authenticated user.
 
         Args:
