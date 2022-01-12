@@ -29,7 +29,7 @@ def test_invalid_jwt_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.InvalidJWTError,
-        test_cognito_authenticator.is_jwt,
+        test_cognito_authenticator._is_jwt,
         token,
     )
 
@@ -50,7 +50,7 @@ def test_invalid_kid_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.InvalidKidError,
-        test_cognito_authenticator.get_verified_header,
+        test_cognito_authenticator._get_verified_header,
         token,
     )
 
@@ -70,7 +70,7 @@ def test_invalid_signature_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.SignatureError,
-        test_cognito_authenticator.get_verified_header,
+        test_cognito_authenticator._get_verified_header,
         token,
     )
 
@@ -91,7 +91,7 @@ def test_expired_token_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.TokenExpiredError,
-        test_cognito_authenticator.get_verified_claims,
+        test_cognito_authenticator._get_verified_claims,
         token,
     )
 
@@ -112,7 +112,7 @@ def test_invalid_issuer_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.InvalidIssuerError,
-        test_cognito_authenticator.get_verified_claims,
+        test_cognito_authenticator._get_verified_claims,
         token,
     )
 
@@ -133,7 +133,7 @@ def test_invalid_audience_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.InvalidAudienceError,
-        test_cognito_authenticator.get_verified_claims,
+        test_cognito_authenticator._get_verified_claims,
         token,
     )
 
@@ -154,6 +154,6 @@ def test_invalid_token_use_should_not_pass_verification(
     assert test_cognito_authenticator.verify_token(token) is False
     pytest.raises(
         cognito.InvalidTokenUseError,
-        test_cognito_authenticator.get_verified_claims,
+        test_cognito_authenticator._get_verified_claims,
         token,
     )

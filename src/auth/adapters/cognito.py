@@ -73,14 +73,14 @@ class CognitoAuthenticator(ports.Authenticator):
         """
 
         try:
-            self.is_jwt(token)
-            self.get_verified_header(token)
-            self.get_verified_claims(token)
+            self._is_jwt(token)
+            self._get_verified_header(token)
+            self._get_verified_claims(token)
         except CognitoError:
             return False
         return True
 
-    def is_jwt(self, token: str) -> bool:
+    def _is_jwt(self, token: str) -> bool:
         """Validate a JSON Web Token (JWT).
 
         A JSON Web Token (JWT) includes three sections: Header, Payload and
@@ -106,7 +106,7 @@ class CognitoAuthenticator(ports.Authenticator):
             raise InvalidJWTError
         return True
 
-    def get_verified_header(self, token: str) -> Dict:
+    def _get_verified_header(self, token: str) -> Dict:
         """Verifies the signature of a a JSON Web Token (JWT) and returns its
         decoded header.
 
@@ -146,7 +146,7 @@ class CognitoAuthenticator(ports.Authenticator):
         # signature successfully verified
         return headers
 
-    def get_verified_claims(self, token: str) -> Dict:
+    def _get_verified_claims(self, token: str) -> Dict:
         """Verifies the claims of a JSON Web Token (JWT) and returns its claims.
 
         Args:
@@ -184,6 +184,54 @@ class CognitoAuthenticator(ports.Authenticator):
 
         # claims successfully verified
         return claims
+
+    def get_current_user(
+        self,
+        token: str,
+    ) -> models.Token:
+        """Return current authenticated user.
+
+        Args:
+            token: The token of the user
+
+        Returns:
+            The user data
+
+        Raises:
+            Exception when unauthorized
+        """
+
+        if not self.verify_token(token):
+            raise Exception("Unauthorized")
+
+        # prepare cognito request
+        headers = {
+            "Content-Type": "application/x-amz-json-1.1",
+            "X-Amz-Target": "AWSCognitoIdentityProviderService.GetUser",
+        }
+        data = json.dumps({"AccessToken": token}).encode("utf-8")
+        req = urllib.request.Request(
+            method="POST",
+            url=f"{self.issuer}",
+            headers=headers,
+            data=data,
+        )
+
+        try:
+            logging.info("Cognito get current user")
+            res = json.loads(urllib.request.urlopen(req).read().decode("utf-8"))
+            logging.info("Cognito successfully got user")
+        except urllib.error.HTTPError:
+            raise Exception("Unauthorized")
+
+        attributes = {attr["Name"]: attr for attr in res["UserAttributes"]}
+
+        return models.User(
+            username=res["Username"],
+            email=attributes["email"]["Value"],
+            first_name=attributes["given_name"]["Value"],
+            last_name=attributes["family_name"]["Value"],
+        )
 
     def authenticate(
         self,

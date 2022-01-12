@@ -24,5 +24,6 @@ if __name__ == "__main__":
     )
     logging.info(f"{token.dict()}\n")
     logging.info(f"Token verified: {auth.verify_token(token.access_token)}\n")
-    logging.info(f"Claims: {auth.get_verified_claims(token.access_token)}\n")
-    claims = auth.get_verified_claims(token.access_token)
+
+    user: models.User = auth.get_current_user(token.access_token)
+    logging.info(f"User: {user.dict()}\n")

@@ -70,7 +70,7 @@ def claims_fixture() -> Dict:
     return {
         "sub": "216f6e34-049a-4339-b025-a8b827dfbc39",
         "token_use": "access",
-        "iss": f"https://cognito-idp.{AWS_COGNITO_REGION}.amazonaws.com/{AWS_USER_POOL_ID}",
+        "iss": f"https://cognito-idp.{AWS_COGNITO_REGION}.amazonaws.com/{AWS_USER_POOL_ID}",  # noqa E501
         "exp": datetime.utcnow() + timedelta(minutes=15),
         "client_id": AWS_USER_POOL_CLIENT_ID,
     }

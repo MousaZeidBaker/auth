@@ -21,6 +21,25 @@ class Authenticator(ABC):
         pass
 
     @abstractmethod
+    def get_current_user(
+        self,
+        token: str,
+    ) -> models.User:
+        """Return current authenticated user.
+
+        Args:
+            token: The token of the user
+
+        Returns:
+            The user data
+
+        Raises:
+            Exception when unauthorized
+        """
+
+        pass
+
+    @abstractmethod
     def authenticate(
         self,
         username: str,
@@ -32,7 +51,11 @@ class Authenticator(ABC):
             username: The username of the user to authenticate
             password: The password of the user to authenticate
 
-        Returns: A token for the user
+        Returns:
+            A token for the user
+
+        Raises:
+            Exception when unauthorized
         """
 
         pass

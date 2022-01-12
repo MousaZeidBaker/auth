@@ -7,3 +7,10 @@ class Token(BaseModel):
     expires_in: int
     refresh_token: str
     id_token: str
+
+
+class User(BaseModel):
+    username: str
+    email: str
+    first_name: str
+    last_name: str
